@@ -150,30 +150,32 @@ if submit:
         st.error(pred)
 
         # SHAP Explanation
-    with st.expander("🧠 SHAP Explanation for This Prediction"):
-    # Use a subset of the training data as background
-        #background = X_train_scaled[:100]
-        explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), shap_background)
+   with st.expander("🧠 SHAP Explanation for This Prediction"):
+        # Create background using the same input 100 times
+        background = np.repeat(input_scaled, repeats=100, axis=0)
     
-        # Predict SHAP values for the single test sample
+        # SHAP Kernel Explainer
+        explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), background)
+    
+        # Compute SHAP values for input
         shap_values = explainer.shap_values(input_scaled, nsamples=100)
-    
-        # Ensure correct shape if list is returned
-        if isinstance(shap_values, list):
+        if isinstance(shap_values, list):  # sometimes returned as a list
             shap_values = shap_values[0]
     
         st.subheader("🔍 Top 10 contributing features")
     
-        fig, ax = plt.subplots()
+        # Plot summary bar chart
+        fig, ax = plt.subplots(figsize=(10, 4))
         shap.summary_plot(
             shap_values,
             input_scaled,
             feature_names=feature_cols,
-            max_display=10,
             plot_type="bar",
+            max_display=10,
             show=False
         )
         st.pyplot(fig)
+
 
     st.download_button(
         label="Download Prediction Result",
