@@ -151,18 +151,19 @@ if submit:
 
         # SHAP Explanation
     with st.expander("🧠 SHAP Explanation for This Prediction"):
-        shap.initjs()
-        background = shap.sample(X_train_scaled, 100)  # or X_train_scaled[:100]
-        explainer = shap.KernelExplainer(model.predict, background)
-
-        # Compute SHAP values for just this sample
+    # Use a subset of the training data as background
+        background = X_train_scaled[:100]
+        explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), background)
+    
+        # Predict SHAP values for the single test sample
         shap_values = explainer.shap_values(input_scaled, nsamples=100)
     
-        # Extract the correct array
-        if isinstance(shap_values, list):  # common for classification
+        # Ensure correct shape if list is returned
+        if isinstance(shap_values, list):
             shap_values = shap_values[0]
     
         st.subheader("🔍 Top 10 contributing features")
+    
         fig, ax = plt.subplots()
         shap.summary_plot(
             shap_values,
