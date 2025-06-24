@@ -16,7 +16,7 @@ with open("feature_columns.json") as f:
     feature_cols = json.load(f)
 
 # Set page config and refined CSS
-dark_bg_url = "https://c4.wallpaperflare.com/wallpaper/615/484/27/artistic-abstract-black-ecg-wallpaper-preview.jpg"
+dark_bg_url = "https://github.com/im-Paulsive/AI-Health-Predictor/blob/main/lifeline-heartbeat.gif?raw=true"
 st.set_page_config(page_title="Heart Disease Predictor", layout="centered")
 
 with st.sidebar:
@@ -36,11 +36,8 @@ st.markdown(
     f"""
     <style>
     html, body, .stApp {{
-        background-image: url('{dark_bg_url}');
+        background: url('{dark_bg_url}')no-repeat center center fixed;
         background-size: cover;
-        background-attachment: fixed;
-        background-repeat: no-repeat;
-        background-position: center;
         color: #f0f0f0;
     }}
     .stApp {{
