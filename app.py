@@ -16,7 +16,7 @@ with open("feature_columns.json") as f:
     feature_cols = json.load(f)
 
 # Set page config and refined CSS
-dark_bg_url = "https://github.com/im-Paulsive/AI-Health-Predictor/blob/main/lifeline-heartbeat.gif?raw=true"
+#dark_bg_url = "https://github.com/im-Paulsive/AI-Health-Predictor/blob/main/lifeline-heartbeat.gif?raw=true"
 st.set_page_config(page_title="Heart Disease Predictor", layout="centered")
 
 with st.sidebar:
@@ -36,7 +36,7 @@ st.markdown(
     f"""
     <style>
     html, body, .stApp {{
-        background: url('{dark_bg_url}')no-repeat center center fixed;
+        background: url("https://github.com/im-Paulsive/AI-Health-Predictor/blob/main/lifeline-heartbeat.gif?raw=true")no-repeat center center fixed;
         background-size: cover;
         color: #f0f0f0;
     }}
