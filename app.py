@@ -152,9 +152,9 @@ if submit:
         # SHAP Explanation
     # SHAP Explanation
     with st.expander("🔍 Top 10 contributing features (SHAP explanation)"):
-        if X_train_scaled is not None:
-            idx = np.random.choice(len(X_train_scaled), min(100, len(X_train_scaled)), replace=False)
-            background = X_train_scaled[idx]
+        if shap_background is not None:
+            idx = np.random.choice(len(shap_background), min(100, len(shap_background)), replace=False)
+            background = shap_background[idx]
 
             explainer = shap.KernelExplainer(model.predict, background)
             shap_values = explainer.shap_values(input_scaled)
