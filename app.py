@@ -150,7 +150,7 @@ if submit:
         st.error(pred)
 
         # SHAP Explanation
-with st.expander("🧠 SHAP Explanation for This Prediction"):
+    with st.expander("🧠 SHAP Explanation for This Prediction"):
         # Create background using the same input 100 times
         background = np.repeat(input_scaled, repeats=100, axis=0)
     
