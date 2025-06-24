@@ -152,21 +152,27 @@ if submit:
         # SHAP Explanation
     with st.expander("🧠 SHAP Explanation for This Prediction"):
         shap.initjs()
-        explainer = shap.KernelExplainer(model.predict, shap_background)
-        shap_values = explainer.shap_values(input_scaled)
+        background = shap.sample(X_train_scaled, 100)  # or X_train_scaled[:100]
+        explainer = shap.KernelExplainer(model.predict, background)
+
+        # Compute SHAP values for just this sample
+        shap_values = explainer.shap_values(input_scaled, nsamples=100)
+    
+        # Extract the correct array
+        if isinstance(shap_values, list):  # common for classification
+            shap_values = shap_values[0]
     
         st.subheader("🔍 Top 10 contributing features")
         fig, ax = plt.subplots()
         shap.summary_plot(
-            shap_values[0] if isinstance(shap_values, list) else shap_values,
+            shap_values,
             input_scaled,
             feature_names=feature_cols,
-            plot_type="bar",
             max_display=10,
+            plot_type="bar",
             show=False
         )
         st.pyplot(fig)
-
 
     st.download_button(
         label="Download Prediction Result",
