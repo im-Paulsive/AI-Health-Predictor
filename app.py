@@ -152,22 +152,27 @@ if submit:
         # SHAP Explanation
     # SHAP Explanation
     with st.expander("🔍 Top 10 contributing features (SHAP explanation)"):
-        if shap_background is not None:
-            background = shap_background[np.random.choice(shap_background.shape[0], 100, replace=False)]
+        if X_train_scaled is not None:
+            idx = np.random.choice(len(X_train_scaled), min(100, len(X_train_scaled)), replace=False)
+            background = X_train_scaled[idx]
+
             explainer = shap.KernelExplainer(model.predict, background)
             shap_values = explainer.shap_values(input_scaled)
-
-            st.markdown("**🧪 Debug Info:**")
-            st.write("SHAP shape:", np.array(shap_values).shape)
-            st.write("Input shape:", input_scaled.shape)
+            shap_values_array = np.array(shap_values)[0]  # shape: (1, n_features)
 
             st.subheader("Top 10 contributing features")
+            mean_abs_shap = np.abs(shap_values_array).flatten()
+            top_indices = np.argsort(mean_abs_shap)[-10:][::-1]
+            top_features = [feature_cols[i] for i in top_indices]
+            top_values = mean_abs_shap[top_indices]
+
             fig, ax = plt.subplots()
-            shap.summary_plot(shap_values, input_scaled, feature_names=feature_cols, max_display=10, plot_type="bar", show=False)
+            ax.barh(top_features[::-1], top_values[::-1], color="#f63366")
+            ax.set_xlabel("SHAP value (impact)")
+            ax.set_title("Top 10 Important Features")
             st.pyplot(fig)
         else:
             st.warning("SHAP explanation skipped: Background training data not available.")
-
 
 
     st.download_button(
