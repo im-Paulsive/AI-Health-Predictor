@@ -2,6 +2,8 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import joblib
+import shap
+import matplotlib.pyplot as plt
 from tensorflow.keras.models import load_model
 import json
 
@@ -144,6 +146,26 @@ if submit:
         st.balloons()
     else:
         st.error(pred)
+
+        # SHAP Explanation
+    with st.expander("🧠 Model Explanation (SHAP)"):
+        import shap
+        import matplotlib.pyplot as plt
+        shap.initjs()
+
+        background = X_train_scaled[:100]  # Assuming X_train_scaled exists in scope
+        explainer = shap.KernelExplainer(model.predict, background)
+
+        shap_values = explainer.shap_values(input_scaled)
+
+        st.subheader("🔍 Top features for this prediction")
+        fig, ax = plt.subplots()
+        shap.summary_plot(shap_values, input_scaled, feature_names=feature_cols, max_display=10, plot_type="bar", show=False)
+        st.pyplot(fig)
+
+        st.markdown("**Force Plot (explanation for one individual):**")
+        st.pyplot(shap.force_plot(explainer.expected_value, shap_values[0], input_scaled[0], feature_names=feature_cols, matplotlib=True))
+
 
     st.download_button(
         label="Download Prediction Result",
