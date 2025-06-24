@@ -151,34 +151,43 @@ if submit:
 
         # SHAP Explanation
     # SHAP Explanation
-    with st.expander("🧠 Model Explanation (SHAP)"):
-        import shap
-        import matplotlib.pyplot as plt
+with st.expander("🧠 Model Explanation (SHAP)"):
 
-        st.markdown("🔍 **Top 10 contributing features for this prediction**")
+    st.markdown("🔍 **Top 10 contributing features for this prediction**")
 
-        # Define prediction function returning probabilities
-        predict_fn = lambda x: model.predict(x).flatten()
+    # Ensure SHAP sees a meaningful background — repeat user input 100x for stability
+    background = np.repeat(input_scaled, 100, axis=0)
 
-        # Use the current patient input as background repeated 100 times
-        background = np.repeat(input_scaled, 100, axis=0)
+    # Predict function for SHAP
+    predict_fn = lambda x: model.predict(x).flatten()
 
-        # Create the SHAP KernelExplainer
-        explainer = shap.KernelExplainer(predict_fn, background)
+    # Initialize explainer
+    explainer = shap.KernelExplainer(predict_fn, background)
 
-        # Compute SHAP values
-        shap_values = explainer.shap_values(input_scaled, nsamples=100)
+    # Compute SHAP values for this individual
+    shap_values = explainer.shap_values(input_scaled, nsamples=100)
 
-        # Debug
-        st.write("🧪 SHAP shape:", np.array(shap_values).shape)
-        st.write("🧪 Input shape:", input_scaled.shape)
+    # Reshape to (num_features,)
+    shap_values_1d = np.array(shap_values).reshape(-1)
 
-        # Plot SHAP summary bar plot
+    # Debug check
+    st.write("SHAP values (sum):", np.sum(np.abs(shap_values_1d)))
+
+    # Show warning if SHAP values are too small
+    if np.sum(np.abs(shap_values_1d)) < 1e-6:
+        st.warning("⚠️ SHAP values are too small — explanation may not be meaningful. Try other input or check feature scaling.")
+    else:
+        # Plot bar chart for top features
         fig, ax = plt.subplots()
-        shap.summary_plot(shap_values, input_scaled, feature_names=feature_cols, max_display=10, plot_type="bar", show=False)
+        shap.summary_plot(
+            [shap_values_1d],  # pass as list of arrays
+            input_scaled,
+            feature_names=feature_cols,
+            max_display=10,
+            plot_type="bar",
+            show=False
+        )
         st.pyplot(fig)
-
-
 
 
     st.download_button(
