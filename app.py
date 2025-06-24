@@ -10,6 +10,7 @@ import json
 # Load saved model and preprocessor
 model = load_model("heart_disease_model.keras")
 scaler = joblib.load("scaler.pkl")
+shap_background = joblib.load("shap_background.pkl")
 with open("feature_columns.json") as f:
     feature_cols = json.load(f)
 
