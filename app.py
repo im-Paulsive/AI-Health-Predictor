@@ -132,11 +132,27 @@ if submit:
     else:
         st.error(pred)
 
+     st.download_button(
+        label="Download Prediction Result",
+        data=input_df.to_csv(index=False),
+        file_name="patient_prediction.csv",
+        mime="text/csv"
+    )
+
     with st.expander("🔎 See explanation"):
         st.markdown("""
-        - The model uses inputs like age, blood pressure, BMI, and lifestyle factors to estimate risk.
+        - The model uses inputs like age, blood pressure, BMI, diet, and activity levels to estimate risk.
         - A score above 50% is classified as **High Risk**.
         - This is not a medical diagnosis — consult a doctor for real evaluation.
         """)
+
+# Footer credits
+st.markdown("""
+---
+**Made by Paul Mathew | Powered by Streamlit + TensorFlow**
+""")
+
+
+   
 
 
