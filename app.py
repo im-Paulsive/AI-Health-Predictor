@@ -153,7 +153,7 @@ if submit:
     with st.expander("🧠 SHAP Explanation for This Prediction"):
     # Use a subset of the training data as background
         background = X_train_scaled[:100]
-        explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), background)
+        explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), shap_background)
     
         # Predict SHAP values for the single test sample
         shap_values = explainer.shap_values(input_scaled, nsamples=100)
