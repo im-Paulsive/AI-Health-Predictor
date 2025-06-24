@@ -151,19 +151,19 @@ if submit:
 
         # SHAP Explanation
     with st.expander("🧠 SHAP Explanation for This Prediction"):
-    
-
         background = np.repeat(input_scaled, repeats=100, axis=0)
         explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), background)
+    
         shap_values = explainer.shap_values(input_scaled, nsamples=100)
         if isinstance(shap_values, list):
             shap_values = shap_values[0]
     
-        # 🧪 Add shape check here
+        shap_values = np.squeeze(shap_values)  # ✅ Fix extra dimension (1, 32, 1) ➝ (1, 32)
+    
+        # 🧪 Debug
         st.write("🧪 Debug Info:")
-        st.write("SHAP values shape:", shap_values.shape)
+        st.write("SHAP values shape (fixed):", shap_values.shape)
         st.write("Input scaled shape:", input_scaled.shape)
-        st.write("Number of feature names:", len(feature_cols))
     
         st.subheader("🔍 Top 10 contributing features")
         fig, ax = plt.subplots(figsize=(10, 4))
