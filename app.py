@@ -151,43 +151,43 @@ if submit:
 
         # SHAP Explanation
     # SHAP Explanation
-with st.expander("🧠 Model Explanation (SHAP)"):
-
-    st.markdown("🔍 **Top 10 contributing features for this prediction**")
-
-    # Ensure SHAP sees a meaningful background — repeat user input 100x for stability
-    background = np.repeat(input_scaled, 100, axis=0)
-
-    # Predict function for SHAP
-    predict_fn = lambda x: model.predict(x).flatten()
-
-    # Initialize explainer
-    explainer = shap.KernelExplainer(predict_fn, background)
-
-    # Compute SHAP values for this individual
-    shap_values = explainer.shap_values(input_scaled, nsamples=100)
-
-    # Reshape to (num_features,)
-    shap_values_1d = np.array(shap_values).reshape(-1)
-
-    # Debug check
-    st.write("SHAP values (sum):", np.sum(np.abs(shap_values_1d)))
-
-    # Show warning if SHAP values are too small
-    if np.sum(np.abs(shap_values_1d)) < 1e-6:
-        st.warning("⚠️ SHAP values are too small — explanation may not be meaningful. Try other input or check feature scaling.")
-    else:
-        # Plot bar chart for top features
-        fig, ax = plt.subplots()
-        shap.summary_plot(
-            [shap_values_1d],  # pass as list of arrays
-            input_scaled,
-            feature_names=feature_cols,
-            max_display=10,
-            plot_type="bar",
-            show=False
-        )
-        st.pyplot(fig)
+    with st.expander("🧠 Model Explanation (SHAP)"):
+    
+        st.markdown("🔍 **Top 10 contributing features for this prediction**")
+    
+        # Ensure SHAP sees a meaningful background — repeat user input 100x for stability
+        background = np.repeat(input_scaled, 100, axis=0)
+    
+        # Predict function for SHAP
+        predict_fn = lambda x: model.predict(x).flatten()
+    
+        # Initialize explainer
+        explainer = shap.KernelExplainer(predict_fn, background)
+    
+        # Compute SHAP values for this individual
+        shap_values = explainer.shap_values(input_scaled, nsamples=100)
+    
+        # Reshape to (num_features,)
+        shap_values_1d = np.array(shap_values).reshape(-1)
+    
+        # Debug check
+        st.write("SHAP values (sum):", np.sum(np.abs(shap_values_1d)))
+    
+        # Show warning if SHAP values are too small
+        if np.sum(np.abs(shap_values_1d)) < 1e-6:
+            st.warning("⚠️ SHAP values are too small — explanation may not be meaningful. Try other input or check feature scaling.")
+        else:
+            # Plot bar chart for top features
+            fig, ax = plt.subplots()
+            shap.summary_plot(
+                [shap_values_1d],  # pass as list of arrays
+                input_scaled,
+                feature_names=feature_cols,
+                max_display=10,
+                plot_type="bar",
+                show=False
+            )
+            st.pyplot(fig)
 
 
     st.download_button(
