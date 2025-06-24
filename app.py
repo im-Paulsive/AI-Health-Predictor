@@ -151,43 +151,23 @@ if submit:
 
         # SHAP Explanation
     # SHAP Explanation
-    with st.expander("🧠 Model Explanation (SHAP)"):
-    
-        st.markdown("🔍 **Top 10 contributing features for this prediction**")
-    
-        # Ensure SHAP sees a meaningful background — repeat user input 100x for stability
-        background = np.repeat(input_scaled, 100, axis=0)
-    
-        # Predict function for SHAP
-        predict_fn = lambda x: model.predict(x).flatten()
-    
-        # Initialize explainer
-        explainer = shap.KernelExplainer(predict_fn, background)
-    
-        # Compute SHAP values for this individual
-        shap_values = explainer.shap_values(input_scaled, nsamples=300)
-    
-        # Reshape to (num_features,)
-        shap_values_1d = np.array(shap_values).reshape(-1)
-    
-        # Debug check
-        st.write("SHAP values (sum):", np.sum(np.abs(shap_values_1d)))
-    
-        # Show warning if SHAP values are too small
-        if np.sum(np.abs(shap_values_1d)) < 1e-6:
-            st.warning("⚠️ SHAP values are too small — explanation may not be meaningful. Try other input or check feature scaling.")
-        else:
-            # Plot bar chart for top features
+    with st.expander("🔍 Top 10 contributing features (SHAP explanation)"):
+        if shap_background is not None:
+            background = shap_background[np.random.choice(X_train_scaled.shape[0], 100, replace=False)]
+            explainer = shap.KernelExplainer(model.predict, background)
+            shap_values = explainer.shap_values(input_scaled)
+
+            st.markdown("**🧪 Debug Info:**")
+            st.write("SHAP shape:", np.array(shap_values).shape)
+            st.write("Input shape:", input_scaled.shape)
+
+            st.subheader("Top 10 contributing features")
             fig, ax = plt.subplots()
-            shap.summary_plot(
-                [shap_values_1d],  # pass as list of arrays
-                input_scaled,
-                feature_names=feature_cols,
-                max_display=10,
-                plot_type="bar",
-                show=False
-            )
+            shap.summary_plot(shap_values, input_scaled, feature_names=feature_cols, max_display=10, plot_type="bar", show=False)
             st.pyplot(fig)
+        else:
+            st.warning("SHAP explanation skipped: Background training data not available.")
+
 
 
     st.download_button(
