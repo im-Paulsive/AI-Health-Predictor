@@ -132,7 +132,7 @@ if submit:
     else:
         st.error(pred)
 
-     st.download_button(
+    st.download_button(
         label="Download Prediction Result",
         data=input_df.to_csv(index=False),
         file_name="patient_prediction.csv",
@@ -149,7 +149,7 @@ if submit:
 # Footer credits
 st.markdown("""
 ---
-**Made by Paul Mathew | Powered by Streamlit + TensorFlow**
+**imPaulsiveX™ | 
 """)
 
 
