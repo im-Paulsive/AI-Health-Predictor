@@ -20,7 +20,7 @@ dark_bg_url = "https://c4.wallpaperflare.com/wallpaper/615/484/27/artistic-abstr
 st.set_page_config(page_title="Heart Disease Predictor", layout="centered")
 
 with st.sidebar:
-    st.image("ChatGPT Image Jun 24, 2025, 12_28_22 PM.png", width=200)
+    st.image("https://github.com/im-Paulsive/AI-Health-Predictor/blob/main/ChatGPT%20Image%20Jun%2024,%202025,%2012_28_22%20PM.png?raw=true", width=200)
     st.markdown("""
     ## 🩺 About this Model
     This AI model predicts the **risk of heart disease** based on:
