@@ -15,6 +15,19 @@ with open("feature_columns.json") as f:
 dark_bg_url = "https://c4.wallpaperflare.com/wallpaper/615/484/27/artistic-abstract-black-ecg-wallpaper-preview.jpg"
 st.set_page_config(page_title="Heart Disease Predictor", layout="centered")
 
+with st.sidebar:
+    st.image("https://raw.githubusercontent.com/paulmathew2003/health-bg/main/logo.png", width=200)
+    st.markdown("""
+    ## 🩺 About this Model
+    This AI model predicts the **risk of heart disease** based on:
+    - Age, Gender, Ethnicity
+    - BMI and Blood Pressure
+    - Sleep quality and medication use
+    - Dietary intake and physical activity
+
+    > **Note**: This tool is for educational use only. Always consult medical professionals for health advice.
+    """)
+
 st.markdown(
     f"""
     <style>
@@ -149,7 +162,7 @@ if submit:
 # Footer credits
 st.markdown("""
 ---
-**imPaulsiveX™ | 
+imPaulsiveX™ | Powered by Streamlit + Tensorflow | https://github.com/im-Paulsive
 """)
 
 
