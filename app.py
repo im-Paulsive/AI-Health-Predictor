@@ -18,7 +18,7 @@ dark_bg_url = "https://c4.wallpaperflare.com/wallpaper/615/484/27/artistic-abstr
 st.set_page_config(page_title="Heart Disease Predictor", layout="centered")
 
 with st.sidebar:
-    st.image("https://raw.githubusercontent.com/paulmathew2003/health-bg/main/logo.png", width=200)
+    st.image("https://github.com/im-Paulsive/AI-Health-Predictor/blob/main/ChatGPT%20Image%20Jun%2024%2C%202025%2C%2012_28_22%20PM.png", width=200)
     st.markdown("""
     ## 🩺 About this Model
     This AI model predicts the **risk of heart disease** based on:
@@ -153,8 +153,8 @@ if submit:
         import matplotlib.pyplot as plt
         shap.initjs()
 
-        background = X_train_scaled[:100]  # Assuming X_train_scaled exists in scope
-        explainer = shap.KernelExplainer(model.predict, background)
+        #background = X_train_scaled[:100]  # Assuming X_train_scaled exists in scope
+        explainer = shap.KernelExplainer(model.predict, shap_background)
 
         shap_values = explainer.shap_values(input_scaled)
 
