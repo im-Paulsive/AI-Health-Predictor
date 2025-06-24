@@ -158,11 +158,11 @@ if submit:
         if isinstance(shap_values, list):
             shap_values = shap_values[0]
     
-        shap_values = np.squeeze(shap_values)  # ✅ Fix extra dimension (1, 32, 1) ➝ (1, 32)
+        shap_values = shap_values.reshape(1, -1)  # ✅ Convert (32,) ➝ (1, 32)
     
-        # 🧪 Debug
+        # Debug info
         st.write("🧪 Debug Info:")
-        st.write("SHAP values shape (fixed):", shap_values.shape)
+        st.write("SHAP values shape (reshaped):", shap_values.shape)
         st.write("Input scaled shape:", input_scaled.shape)
     
         st.subheader("🔍 Top 10 contributing features")
@@ -176,6 +176,7 @@ if submit:
             show=False
         )
         st.pyplot(fig)
+
 
 
     st.download_button(
