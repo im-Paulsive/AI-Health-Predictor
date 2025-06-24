@@ -151,20 +151,21 @@ if submit:
 
         # SHAP Explanation
     with st.expander("🧠 SHAP Explanation for This Prediction"):
-        # Create background using the same input 100 times
+    
+
         background = np.repeat(input_scaled, repeats=100, axis=0)
-    
-        # SHAP Kernel Explainer
         explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), background)
-    
-        # Compute SHAP values for input
         shap_values = explainer.shap_values(input_scaled, nsamples=100)
-        if isinstance(shap_values, list):  # sometimes returned as a list
+        if isinstance(shap_values, list):
             shap_values = shap_values[0]
     
-        st.subheader("🔍 Top 10 contributing features")
+        # 🧪 Add shape check here
+        st.write("🧪 Debug Info:")
+        st.write("SHAP values shape:", shap_values.shape)
+        st.write("Input scaled shape:", input_scaled.shape)
+        st.write("Number of feature names:", len(feature_cols))
     
-        # Plot summary bar chart
+        st.subheader("🔍 Top 10 contributing features")
         fig, ax = plt.subplots(figsize=(10, 4))
         shap.summary_plot(
             shap_values,
