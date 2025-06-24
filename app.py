@@ -164,8 +164,14 @@ if submit:
         shap.summary_plot(shap_values, input_scaled, feature_names=feature_cols, max_display=10, plot_type="bar", show=False)
         st.pyplot(fig)
 
-        st.markdown("**Force Plot (explanation for one individual):**")
-        st.pyplot(shap.force_plot(explainer.expected_value, shap_values[0], input_scaled[0], feature_names=feature_cols, matplotlib=True))
+        st.subheader("📈 Force Plot: Contribution for this patient")
+        shap_html = shap.force_plot(
+        explainer.expected_value,
+        shap_values[0] if isinstance(shap_values, list) else shap_values,
+        input_scaled,
+        feature_names=feature_cols
+    )
+    components.html(shap_html.html(), height=300)
 
 
     st.download_button(
