@@ -150,32 +150,34 @@ if submit:
         st.error(pred)
 
         # SHAP Explanation
-    with st.expander("🧠 SHAP Explanation for This Prediction"):
-        background = np.repeat(input_scaled, repeats=100, axis=0)
-        explainer = shap.KernelExplainer(lambda x: model.predict(x, verbose=0), background)
-    
+    # SHAP Explanation
+    with st.expander("🧠 Model Explanation (SHAP)"):
+        import shap
+        import matplotlib.pyplot as plt
+
+        st.markdown("🔍 **Top 10 contributing features for this prediction**")
+
+        # Define prediction function returning probabilities
+        predict_fn = lambda x: model.predict(x).flatten()
+
+        # Use the current patient input as background repeated 100 times
+        background = np.repeat(input_scaled, 100, axis=0)
+
+        # Create the SHAP KernelExplainer
+        explainer = shap.KernelExplainer(predict_fn, background)
+
+        # Compute SHAP values
         shap_values = explainer.shap_values(input_scaled, nsamples=100)
-        if isinstance(shap_values, list):
-            shap_values = shap_values[0]
-    
-        shap_values = shap_values.reshape(1, -1)  # ✅ Convert (32,) ➝ (1, 32)
-    
-        # Debug info
-        st.write("🧪 Debug Info:")
-        st.write("SHAP values shape (reshaped):", shap_values.shape)
-        st.write("Input scaled shape:", input_scaled.shape)
-    
-        st.subheader("🔍 Top 10 contributing features")
-        fig, ax = plt.subplots(figsize=(10, 4))
-        shap.summary_plot(
-            shap_values,
-            input_scaled,
-            feature_names=feature_cols,
-            plot_type="bar",
-            max_display=10,
-            show=False
-        )
+
+        # Debug
+        st.write("🧪 SHAP shape:", np.array(shap_values).shape)
+        st.write("🧪 Input shape:", input_scaled.shape)
+
+        # Plot SHAP summary bar plot
+        fig, ax = plt.subplots()
+        shap.summary_plot(shap_values, input_scaled, feature_names=feature_cols, max_display=10, plot_type="bar", show=False)
         st.pyplot(fig)
+
 
 
 
