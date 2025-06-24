@@ -165,7 +165,7 @@ if submit:
         explainer = shap.KernelExplainer(predict_fn, background)
     
         # Compute SHAP values for this individual
-        shap_values = explainer.shap_values(input_scaled, nsamples=100)
+        shap_values = explainer.shap_values(input_scaled, nsamples=300)
     
         # Reshape to (num_features,)
         shap_values_1d = np.array(shap_values).reshape(-1)
