@@ -151,21 +151,21 @@ if submit:
 
         # SHAP Explanation
     with st.expander("🧠 SHAP Explanation for This Prediction"):
-    shap.initjs()
-    explainer = shap.KernelExplainer(model.predict, shap_background)
-    shap_values = explainer.shap_values(input_scaled)
-
-    st.subheader("🔍 Top 10 contributing features")
-    fig, ax = plt.subplots()
-    shap.summary_plot(
-        shap_values[0] if isinstance(shap_values, list) else shap_values,
-        input_scaled,
-        feature_names=feature_cols,
-        plot_type="bar",
-        max_display=10,
-        show=False
-    )
-    st.pyplot(fig)
+        shap.initjs()
+        explainer = shap.KernelExplainer(model.predict, shap_background)
+        shap_values = explainer.shap_values(input_scaled)
+    
+        st.subheader("🔍 Top 10 contributing features")
+        fig, ax = plt.subplots()
+        shap.summary_plot(
+            shap_values[0] if isinstance(shap_values, list) else shap_values,
+            input_scaled,
+            feature_names=feature_cols,
+            plot_type="bar",
+            max_display=10,
+            show=False
+        )
+        st.pyplot(fig)
 
 
     st.download_button(
